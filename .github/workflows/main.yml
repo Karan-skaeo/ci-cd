@@ -12,6 +12,20 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4  # Checks out your repository code
+      
+      - name: Create .env file
+        run: |
+          echo "APP_USERNAME_OR_EMAIL=${{ secrets.APP_USERNAME_OR_EMAIL }}" >> .env
+          echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" >> .env
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+
+      - name: Verify .env file
+        run: cat .env # Remove this in production
+
+      - name: Use .env file
+        run: |
+          export $(cat .env | xargs)
+          echo "Your environment variable: $JWT_SECRET_KEY"
 
       - name: Set up Python
         uses: actions/setup-python@v5
